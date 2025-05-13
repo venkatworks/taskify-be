@@ -1,5 +1,0 @@
-const DBConnection = async () => {
-
-}
-
-DBConnection();
