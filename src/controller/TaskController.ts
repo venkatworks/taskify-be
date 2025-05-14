@@ -3,10 +3,8 @@ import { create, deleteTaskById, getTaskById, getTasks, updateTaskById } from ".
 
 export const getAllTasks = async (request:Request, response: Response) => {
     try {
-        const tasksList = await getTasks();
-        response.status(200).send({
-            tasks: tasksList
-        })
+        const tasks = await getTasks();
+        response.status(200).send(tasks)
     } catch(error) {
         response.status(500).json({ error: 'fetch failed', details: (error as Error).message });
     }
@@ -16,9 +14,9 @@ export const getTask = async (request:Request, response: Response) => {
     try {
         const {id} = request.params
         const task = await getTaskById(id);
-        response.status(200).send({
+        response.status(200).send(
             task
-        })
+        )
     } catch(error) {
         response.status(500).json({ error: 'fetch failed', details: (error as Error).message });
     }
