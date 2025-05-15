@@ -1,4 +1,4 @@
-import express from 'express';
+import express,{Request} from 'express';
 import dotEnv from 'dotenv';
 dotEnv.config();
 
@@ -13,7 +13,11 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(morgan(':method :url :status :res[content-length] - :response-time ms')); 
+morgan.token('req-body', (req) => {
+  const request = req as Request;
+  return JSON.stringify(request.body);
+});
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :req-body')); 
 
 app.use('/v1', router);
 
