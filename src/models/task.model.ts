@@ -29,22 +29,25 @@ export const getTaskById = async (taskId: string): Promise<Task  | null>  => {
     return task;
 }
 
-export const create = async (task: Task): Promise<ObjectId> => { 
+export const create = async (task: Task): Promise<Task> => { 
     const tasks = await getCollection<Task>('tasks');
     const result = await tasks.insertOne(task);
-    return result.insertedId;
+    const insertedTask = await tasks.findOne({ _id: result.insertedId });
+    if (!insertedTask) {
+        throw new Error('Failed to find the inserted task');
+    }
+    return insertedTask;
 }
 
 export const updateTaskById = async (taskId: string, updateData: Task): Promise<Task | null> => {
 
     const tasks = await getCollection<Task>('tasks');
-    const task = await tasks.findOneAndUpdate({ _id: new ObjectId(taskId) },{ $set: updateData },{ returnDocument: 'after' });
+    const result = await tasks.findOneAndUpdate({ _id: new ObjectId(taskId) },{ $set: updateData },{ returnDocument: 'after' });
 
-    if (!task) {
+    if (!result) {
         throw new Error('Task not found');
     }
-
-    return task;
+    return result;
 }
 
 export const deleteTaskById =  async (taskId: string): Promise<boolean> => { 

@@ -35,7 +35,7 @@ export const updateTask = async  (request:Request, response: Response) => {
     try {
         const {id} = request.params;
         const updateData = await updateTaskById(id, request.body);
-        response.status(201).json({ task: updateData});
+        response.status(201).json({ updateData});
     } catch(error) {
         response.status(500).json({ error: 'update failed', details: (error as Error).message });
     }
